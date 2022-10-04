@@ -31,7 +31,8 @@ public class Site
     public String listerTousProduits(){                                                                                 //Méthode qui retourne tous les produits du stock sous la forme d'une chaîne de caractères
         String res="";
         for(Produit prod : stock)
-            res+=prod.toString()+"\n";
+            if (prod.getQuantite()>0)
+                res+=prod.toString()+"\n";
         return res;
     }
 
@@ -111,6 +112,60 @@ public class Site
         for (Commande commande : commandes){
             if (!commande.isLivre())
                 res+=commande.toString();
+        }
+        return res;
+  }
+  public Produit chercherProduit(String ref){
+        Produit res=new Produit();
+        for (int i=0;i<stock.size();i++){
+            Produit a = stock.get(i);
+            if (a.getReference().equals(ref)){
+                res = a;
+            }
+        }
+        return res;
+  }
+
+  public void livraison(){
+        for (int i=0;i<commandes.size();i++){
+            Commande a = commandes.get(i);
+            if (!a.isLivre()){
+                for (int j=0;j<a.getReferences().size();j++){
+                    String ref = a.getReferences().get(j);
+                    Produit p = chercherProduit(ref);
+                    if (a.getQuantites().get(j)<=p.getQuantite()){
+                        int newQuantite = p.getQuantite()-a.getQuantites().get(j);
+                        p.setQuantite(newQuantite);
+                    }
+                    else {
+                        int nbManque = a.getQuantites().get(j)-p.getQuantite();
+                        String manque = a.getMotifNonLivraison()+"Il manque "+nbManque+" "+ref+"\n";
+                        a.setMotifNonLivraison(manque);
+                    }
+                }
+            }
+            if (a.getMotifNonLivraison().equals("")){
+                a.setLivre(true);
+            }
+        }
+  }
+
+  public String calculVentes(){
+        String res="";
+        for (int i=0;i< commandes.size();i++){
+            Commande a = commandes.get(i);
+            if (a.isLivre()){
+                int total = 0;
+                res += "Commande : "+a.getNumero();
+                for (int j=0;i<a.getReferences().size();i++){
+                    String ref = a.getReferences().get(i);
+                    Produit p = chercherProduit(ref);
+                    res+="\n\t\t"+p.getNom()+"\t"+a.getQuantites().get(j)+"\t"+p.getPrix()+"\n";
+                    total += a.getQuantites().get(j)*p.getPrix();
+                }
+                res+="==========================================================================\n";
+                res+="SOMME : "+total+" euros";
+            }
         }
         return res;
   }

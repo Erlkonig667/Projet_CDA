@@ -19,6 +19,7 @@ public class Commande{
         this.references = new ArrayList<String>();
         this.quantites = new ArrayList<Integer>();
         this.isLivre = false;
+        this.motifNonLivraison="";
     }
     public Commande(){}                                                                                                 //Constructeur vide
 
@@ -87,9 +88,13 @@ public class Commande{
     }
 
     public String toString() {
-        String res = "Commande : "+this.getNumero()+"\n\t Date : "+this.getDate()+"\n\t Client : "+this.getClient()+"\n\t References des produits : "+this.afficherReferences()+"\n";
+        String res = "Commande : "+this.getNumero()+"\n\t Date : "+this.getDate()+"\n\t Client : "
+                +this.getClient()+"\n\t References des produits : "+this.afficherReferences()+"\n"
+                +this.getMotifNonLivraison()+"\n";
         res+="------------------------------------------------------------------------------------------------------------------------------\n";
         return res;
     }
+
+
 
 }

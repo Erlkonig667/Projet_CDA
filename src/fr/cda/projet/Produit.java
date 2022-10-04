@@ -15,6 +15,7 @@ public class Produit{
         this.prix = prix;
         this.quantite = quantite;
     }
+    public Produit(){}
 
     public String getReference() {
         return reference;
