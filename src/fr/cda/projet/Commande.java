@@ -155,7 +155,8 @@ public class Commande{
     public String afficherReferences(){
         String res="";
         for (int i=0;i<references.size();i++){
-            res+="\n\t\t"+quantites.get(i)+" x "+references.get(i);
+            if (quantites.get(i)>0)
+                res+="\n\t\t"+quantites.get(i)+" x "+references.get(i);
         }
         return res;
     }

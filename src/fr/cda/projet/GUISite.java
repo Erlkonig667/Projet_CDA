@@ -26,7 +26,7 @@ public class GUISite implements FormulaireInt
         form.addLabel("Afficher tous les bons de commande");
         form.addButton("AFF_COMMANDES","Toutes les commandes");
         form.addLabel("");
-        form.addText("NUM_COMMANDE","Numéro de commande",true,"1");
+        form.addText("NUM_COMMANDE","Numéro de commande",true,"");
         form.addButton("AFF_COMMANDE","Afficher");
         form.addButton("MODIF_COMMANDE","Modifier");
         form.addLabel("");
