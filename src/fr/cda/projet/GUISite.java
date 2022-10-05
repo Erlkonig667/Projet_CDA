@@ -2,17 +2,25 @@ package fr.cda.projet;
 
 import fr.cda.ihm.*;
 
+/**
+ * The type GuiSite.
+ */
 // Classe de definition de l'IHM principale du compte
 public class GUISite implements FormulaireInt
 {
     private Site site;  // Le site
-    private Formulaire form;
+    private Formulaire form; // Le formulaire principal du programme
 
-    public GUISite(Site site){                                                                                          // Constructeur
+    /**
+     * Instantiates a new GuiSite.
+     *
+     * @param site the site
+     */
+    public GUISite(Site site){                                                                                          //Constructeur
         this.site = site;
-        form = new Formulaire("Site de vente",this,1100,730);                          // Creation du formulaire
+        form = new Formulaire("Site de vente",this,1100,730);                                     //Creation du formulaire
         form.setPosition(10,10);
-        form.addLabel("Afficher tous les produits du stock");                                                           // Creation des elements de l'IHM
+        form.addLabel("Afficher tous les produits du stock");                                                           //Creation des elements de l'IHM
         form.addButton("AFF_STOCK","Tout le stock");
         form.addLabel("");
         form.addLabel("Afficher tous les bons de commande");
@@ -54,18 +62,37 @@ public class GUISite implements FormulaireInt
         if (nomSubmit.equals("AFF_COMMANDE"))                                                                           //Affichage d'une commande
             {
                 String numStr = form.getValeurChamp("NUM_COMMANDE");
-                int num = Integer.parseInt(numStr);
-                String res = site.listerCommande(num);
-                form.setValeurChamp("RESULTATS",res);
+                if (!isNombre(numStr)){
+                    afficherResultats("Veuillez entrer un nombre afin de trouver la commande associée.");
+                } else {
+                    int num = Integer.parseInt(numStr);
+                    if (!site.isCommandePresente(num)) {
+                        afficherResultats("La commande que vous cherchez n'existe pas.\n" +
+                                "Veuillez entrer un numéro de commande valide.");
+                    } else {
+                        String res = site.listerCommande(num);
+                        form.setValeurChamp("RESULTATS", res);
+                    }
+                }
             }
 
-        if (nomSubmit.equals("MODIF_COMMANDE"))
+        if (nomSubmit.equals("MODIF_COMMANDE"))                                                                         //Modification d'une commande en passant par l'ouverture d'une nouvelle fenêtre
         {
-            int id = Integer.parseInt(form.getValeurChamp("NUM_COMMANDE"));
-            GUIModifCommande modif = new GUIModifCommande(this,site,id);
+            String numStr = form.getValeurChamp("NUM_COMMANDE");
+            if (!isNombre(numStr)){
+                afficherResultats("Veuillez entrer un nombre afin de trouver la commande associée.");
+            } else {
+                int num = Integer.parseInt(numStr);
+                if (!site.isCommandePresente(num)) {
+                    afficherResultats("La commande que vous cherchez n'existe pas.\n" +
+                            "Veuillez entrer un numéro de commande valide.");
+                } else {
+                    GUIModifCommande modif = new GUIModifCommande(this,site,num);
+                }
+            }
         }
 
-        if (nomSubmit.equals("LIVRAISON"))
+        if (nomSubmit.equals("LIVRAISON"))                                                                              //Livraison de toutes les commandes (si elles peuvent être livrées
         {
             site.livraison();
             String res = "Les commandes ont bien été livrées.\nPour afficher les commandes pour lesquelles il manque" +
@@ -73,7 +100,7 @@ public class GUISite implements FormulaireInt
             form.setValeurChamp("RESULTATS",res);
         }
 
-        if (nomSubmit.equals("AFF_EN_ATTENTE"))                                                                       // Affichage de toutes les commandes non-livrées
+        if (nomSubmit.equals("AFF_EN_ATTENTE"))                                                                         //Affichage de toutes les commandes non-livrées
             {
                 String res = "COMMANDES NON LIVRÉES :\n\n----------------------------------------------" +
                         "--------------------------------------------------------------------------------\n";
@@ -81,15 +108,35 @@ public class GUISite implements FormulaireInt
                 form.setValeurChamp("RESULTATS",res);
              }
 
-        if (nomSubmit.equals("CALCUL_VENTES"))
+        if (nomSubmit.equals("CALCUL_VENTES"))                                                                          //Calcul des ventes des commandes livrées
         {
             form.setValeurChamp("RESULTATS",site.calculVentes());
         }
 
 
     }
+
+    /**
+     * Afficher resultats.
+     *
+     * @param res the string we want to display
+     */
     public void afficherResultats(String res){
         form.setValeurChamp("RESULTATS",res);
     }
 
+    /**
+     * Is nombre boolean.
+     *
+     * @param texte the String we want to test
+     * @return the boolean
+     */
+    public boolean isNombre(String texte){
+        boolean numerique = true;
+        for (int i=0;i<texte.length();i++){
+            if (!Character.isDigit(texte.charAt(i)))
+                numerique = false;
+        }
+        return numerique;
+    }
 }

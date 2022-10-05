@@ -1,7 +1,6 @@
 // Projet 1 CDA
 // 
-// NOM,Prenom
-// NOM,Prenom
+// LANGLAIS THIBAUT
 //
 package fr.cda.projet;
 
