@@ -22,9 +22,9 @@ public class Site
      */
     public Site() throws ParseException {                                                                                  //Constructeur
         stock = new ArrayList<Produit>();
-        initialiserStock("C:\\Users\\greta2022\\Desktop\\Programmes Java\\ProjetCDA1\\data/Produits.txt");       //Lecture du fichier data/Produits.txt et création du stock
+        initialiserStock("data/Produits.txt");       //Lecture du fichier data/Produits.txt et création du stock
         commandes = new ArrayList<Commande>();
-        initialiserCommandes("C:\\Users\\greta2022\\Desktop\\Programmes Java\\ProjetCDA1\\data/Commandes.txt");  //Lecture du fichier data/Commandes.txt et création de la liste de commandes
+        initialiserCommandes("data/Commandes.txt");  //Lecture du fichier data/Commandes.txt et création de la liste de commandes
 
     }
 
